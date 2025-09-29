@@ -8,7 +8,11 @@ public class CustomUpdateTotp extends UpdateTotp {
     public void processAction(RequiredActionContext context) {
         super.processAction(context);
         if (context.getStatus() == RequiredActionContext.Status.SUCCESS) {
-            context.getAuthenticationSession().setAuthNote(CustomLoginFormsProvider.REQUIRED_ACTION_UPDATED_NOTE_KEY, getId());
+            RequiredActionHelper.markActionCompleted(
+                context.getAuthenticationSession(),
+                context.getUser(),
+                getId()
+            );
         }
     }
 

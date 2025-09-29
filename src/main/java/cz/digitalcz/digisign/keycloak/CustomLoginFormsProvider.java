@@ -23,9 +23,13 @@ public class CustomLoginFormsProvider extends FreeMarkerLoginFormsProvider {
         super.createCommonAttributes(theme, locale, messagesBundle, baseUriBuilder, page);
 
         AuthenticationSessionModel authSession = this.authenticationSession;
-        if (authSession != null) {
-            String requiredActionUpdated = authSession.getAuthNote(REQUIRED_ACTION_UPDATED_NOTE_KEY);
+        String requiredActionUpdated = RequiredActionHelper.detectCompletedAction(authSession, this.user);
+
+        if (requiredActionUpdated != null) {
             setAttribute("requiredActionUpdated", requiredActionUpdated);
+            setAttribute("hasRequiredActionUpdated", true);
+        } else {
+            setAttribute("hasRequiredActionUpdated", false);
         }
     }
 }

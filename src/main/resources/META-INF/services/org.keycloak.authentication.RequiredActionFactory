@@ -1,2 +1,2 @@
-cz.digitalcz.digisign.keycloak.CustomUpdateTotp
-cz.digitalcz.digisign.keycloak.CustomUpdatePassword
+cz.digitalcz.digisign.keycloak.CustomUpdateTotpFactory
+cz.digitalcz.digisign.keycloak.CustomUpdatePasswordFactory
