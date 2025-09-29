@@ -1,9 +1,9 @@
 package cz.digitalcz.digisign.keycloak;
 
 import org.keycloak.authentication.RequiredActionContext;
-import org.keycloak.authentication.requiredactions.UpdateTotp;
+import org.keycloak.authentication.requiredactions.UpdatePassword;
 
-public class CustomUpdateTotp extends UpdateTotp {
+public class CustomUpdatePassword extends UpdatePassword {
     @Override
     public void processAction(RequiredActionContext context) {
         super.processAction(context);
@@ -14,11 +14,11 @@ public class CustomUpdateTotp extends UpdateTotp {
 
     @Override
     public String getDisplayText() {
-        return "Custom Configure OTP";
+        return "Custom Update Password";
     }
 
     @Override
     public String getId() {
-        return "CONFIGURE_TOTP";
+        return "UPDATE_PASSWORD";
     }
 }
