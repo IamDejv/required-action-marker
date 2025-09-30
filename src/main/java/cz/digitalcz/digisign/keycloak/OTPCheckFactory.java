@@ -6,21 +6,21 @@ import org.keycloak.authentication.RequiredActionProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 
-public class CustomUpdatePasswordFactory implements RequiredActionFactory {
+public class OTPCheckFactory implements RequiredActionFactory {
 
     @Override
     public RequiredActionProvider create(KeycloakSession session) {
-        return new CustomUpdatePassword(session);
+        return new OTPCheck();
     }
 
     @Override
     public String getId() {
-        return "UPDATE_PASSWORD";
+        return "OTP_CHECK";
     }
 
     @Override
     public String getDisplayText() {
-        return "Custom Update Password";
+        return "OTP Check";
     }
 
     @Override

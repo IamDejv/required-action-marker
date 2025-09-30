@@ -1,2 +1,3 @@
+cz.digitalcz.digisign.keycloak.OTPCheckFactory
 cz.digitalcz.digisign.keycloak.CustomUpdateTotpFactory
 cz.digitalcz.digisign.keycloak.CustomUpdatePasswordFactory
