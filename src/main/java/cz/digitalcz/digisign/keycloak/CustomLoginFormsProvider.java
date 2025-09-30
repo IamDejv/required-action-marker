@@ -11,6 +11,9 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.forms.login.LoginFormsPages;
 
 public class CustomLoginFormsProvider extends FreeMarkerLoginFormsProvider {
+    public static final String REQUIRED_ACTION_UPDATED_NOTE_KEY = "requiredActionUpdated";
+
+
     public CustomLoginFormsProvider(KeycloakSession session) {
         super(session);
     }
@@ -20,9 +23,13 @@ public class CustomLoginFormsProvider extends FreeMarkerLoginFormsProvider {
         super.createCommonAttributes(theme, locale, messagesBundle, baseUriBuilder, page);
 
         AuthenticationSessionModel authSession = this.authenticationSession;
-        if (authSession != null) {
-            String customTotpUpdated = authSession.getAuthNote(CustomUpdateTotp.NOTE_KEY);
-            setAttribute("requiredActionUpdated", customTotpUpdated);
+        String requiredActionUpdated = RequiredActionHelper.detectCompletedAction(authSession, this.user);
+
+        if (requiredActionUpdated != null) {
+            setAttribute("requiredActionUpdated", requiredActionUpdated);
+            setAttribute("hasRequiredActionUpdated", true);
+        } else {
+            setAttribute("hasRequiredActionUpdated", false);
         }
     }
 }
