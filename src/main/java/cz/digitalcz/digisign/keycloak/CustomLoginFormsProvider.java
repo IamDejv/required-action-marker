@@ -13,7 +13,6 @@ import org.keycloak.forms.login.LoginFormsPages;
 public class CustomLoginFormsProvider extends FreeMarkerLoginFormsProvider {
     public static final String REQUIRED_ACTION_UPDATED_NOTE_KEY = "requiredActionUpdated";
 
-
     public CustomLoginFormsProvider(KeycloakSession session) {
         super(session);
     }
