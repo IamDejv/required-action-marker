@@ -5,6 +5,16 @@ import org.keycloak.models.UserModel;
 
 public class RequiredActionHelper {
 
+    private static final String LAST_COMPLETED_ACTION_ATTR = "lastCompletedRequiredAction";
+    private static final String LAST_COMPLETED_ACTION_TIME_ATTR = "lastCompletedRequiredActionTime";
+
+    /**
+     * Jak dlouho po dokončení akce považujeme fallback z user attributes za platný.
+     * Bez tohoto okna by se potvrzovací obrazovka zobrazovala i na pozdějších
+     * (nesouvisejících) info stránkách, protože atribut se nikdy nemaže.
+     */
+    private static final long COMPLETED_ACTION_TTL_MS = 60_000L;
+
     /**
      * Zkusí detekovat dokončenou required action různými způsoby
      */
@@ -25,10 +35,10 @@ public class RequiredActionHelper {
             return actionFromClient;
         }
 
-        // 3. Zkusit z user note (pokud máme user)
+        // 3. Fallback z user attributes - platí jen krátce po dokončení akce
         if (user != null) {
-            String actionFromUser = user.getFirstAttribute("lastCompletedRequiredAction");
-            if (actionFromUser != null) {
+            String actionFromUser = user.getFirstAttribute(LAST_COMPLETED_ACTION_ATTR);
+            if (actionFromUser != null && isRecentlyCompleted(user)) {
                 return actionFromUser;
             }
         }
@@ -46,13 +56,24 @@ public class RequiredActionHelper {
 
             // Záložní způsob - client note
             authSession.setClientNote(CustomLoginFormsProvider.REQUIRED_ACTION_UPDATED_NOTE_KEY, actionId);
-
         }
 
         // Dlouhodobé uložení do user attributes
         if (user != null) {
-            user.setSingleAttribute("lastCompletedRequiredAction", actionId);
-            user.setSingleAttribute("lastCompletedRequiredActionTime", String.valueOf(System.currentTimeMillis()));
+            user.setSingleAttribute(LAST_COMPLETED_ACTION_ATTR, actionId);
+            user.setSingleAttribute(LAST_COMPLETED_ACTION_TIME_ATTR, String.valueOf(System.currentTimeMillis()));
+        }
+    }
+
+    private static boolean isRecentlyCompleted(UserModel user) {
+        String completedAt = user.getFirstAttribute(LAST_COMPLETED_ACTION_TIME_ATTR);
+        if (completedAt == null) {
+            return false;
+        }
+        try {
+            return System.currentTimeMillis() - Long.parseLong(completedAt) <= COMPLETED_ACTION_TTL_MS;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 }
