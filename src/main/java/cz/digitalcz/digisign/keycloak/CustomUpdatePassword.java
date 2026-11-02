@@ -13,10 +13,6 @@ public class CustomUpdatePassword extends UpdatePassword {
         super();
     }
 
-    public CustomUpdatePassword(KeycloakSession session) {
-        super(session);
-    }
-
     @Override
     public void requiredActionChallenge(RequiredActionContext context) {
         super.requiredActionChallenge(context);
@@ -36,7 +32,7 @@ public class CustomUpdatePassword extends UpdatePassword {
 
     @Override
     public RequiredActionProvider create(KeycloakSession session) {
-        return new CustomUpdatePassword(session);
+        return new CustomUpdatePassword();
     }
 
     @Override
